@@ -35,7 +35,7 @@ image_speed = 0.2;
 pause_frames = 0;
 invuln_frames = 0;
 max_invuln_frames = 20;
-
+init_y = y;
 jump_speed = 12;
 
 //frame pause handlers
@@ -75,6 +75,7 @@ state_choose = 0;
 state_attack_ranged = 1;
 state_attack_charge = 2;
 state_stomp = 3;
+state_stun = 4;
 
 charge_frame_count = 0;
 
@@ -235,6 +236,7 @@ if (pause_frames &lt;= 0){
             }
             hsp = move_speed * dir;
             if (place_meeting(x + hsp, y - 3, floorbox)){
+                state = state_stun;
                 while (!place_meeting(x + sign(hsp), y, floorbox)){
                     x += sign(hsp);
                 }
@@ -246,16 +248,15 @@ if (pause_frames &lt;= 0){
                 }
                 //x -= dir * 10;
                 hsp = 0;
-                pause_frames = wall_hit_pause;
+                pause_frames = wall_hit_pause / 2;
                 //state = 0;
                 dir = 0;
                 charge_frame_count = 0;
                 num_charge_attacks++;
-                sprite_index = spr_boss_minotaur_idle;
+                //sprite_index = spr_boss_minotaur_idle;
                 if (num_charge_attacks &gt;= max_charge_attacks){
-                    state++;
+                    state = state_stomp;
                     image_index = 1;
-                        //image_xscale = -1 * sign(player.x - x);
                     num_charge_attacks = 0;
                     break;
                     hsp = 0;
@@ -321,17 +322,24 @@ if (pause_frames &lt;= 0){
             }*/
             break;
         }
+        case (state_stun):{
+            y = init_y;
+            sprite_index = spr_boss_minotaur_idle;
+            pause_frames = wall_hit_pause / 2;
+            image_xscale = -1 * sign(player.x - x);
+            x += image_xscale;
+            state = state_attack_charge;
+            break;
+        }
         case (state_stomp):{
-            sprite_index = spr_boss_minotaur_stomping;
+            sprite_index = spr_minotaur_tapping;
             image_xscale = -1 * sign(player.x - x);
             image_speed = 0;
             image_index = 0;
             vsp += 1;
             y += vsp;
             if (place_meeting(x, y + vsp, floorbox)){
-                while(!place_meeting(x, y + sign(vsp), floorbox)){
-                    y += sign(vsp);
-                }
+                y = init_y;
                 vsp = -jump_speed;
                 image_index = 1;
                 pause_frames = frames_between_stomps;

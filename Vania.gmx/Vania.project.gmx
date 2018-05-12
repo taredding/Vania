@@ -244,6 +244,7 @@
   </objects>
   <rooms name="rooms">
     <room>rooms\room_initialize</room>
+    <room>rooms\room_boss_angry</room>
     <rooms name="level 1">
       <room>rooms\room_1_1_new</room>
       <room>rooms\room_1_2_new</room>
@@ -260,7 +261,6 @@
       <room>rooms\room_p_1</room>
       <room>rooms\room_boss_platform</room>
     </rooms>
-    <room>rooms\room_boss_angry</room>
     <room>rooms\room_boss_bat</room>
     <rooms name="hooks">
       <room>rooms\room_h_new</room>
