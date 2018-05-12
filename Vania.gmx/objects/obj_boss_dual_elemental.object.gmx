@@ -37,7 +37,7 @@ invuln_frames = 0;
 max_invuln_frames = 20;
 init_y = y;
 jump_speed = 12;
-
+enraged = false;
 //frame pause handlers
 
     //frames paused after choosing ranged attack
@@ -46,17 +46,17 @@ jump_speed = 12;
     ranged_attack_pause = 60;
     
     //frames paused when starting up a charge
-    charge_begin_pause = 40;
+    charge_begin_pause = 25;
     
     //frames paused when hitting wall
-    wall_hit_pause = 120;
+    wall_hit_pause = 80;
     
     frames_between_stomps = 20;
     
     frames_after_stomps = 40;
 
 hsp = 0;
-max_speed = 5;
+max_speed = 10;
 min_speed = 1;
 move_speed = min_speed;
 dir = 0;
@@ -148,7 +148,7 @@ vsp = 0;
     if (place_meeting(x, y, whipper) || place_meeting(x, y, obj_e_whipper)){
         invuln_frames = max_invuln_frames;
         hp--;
-        if (hp == (max_hp / 2) + 3){
+        if (!enraged &amp;&amp; hp &lt;= (max_hp / 2) + 3){
             wall_hit_pause /= 2;
             frames_after_stomps /= 2;
             ranged_attack_pause -= 20;
@@ -161,6 +161,7 @@ vsp = 0;
             image_index = 0;
             num_stomps = 0;
             y = start_y;
+            enraged = true;
         }
         else if (hp &lt;= 0) {
             instance_create(x, y, obj_warp);
@@ -175,16 +176,7 @@ if (pause_frames &lt;= 0){
             image_xscale = -1 * sign(player.x - x);
             sprite_index = spr_minotaur_tapping;
             image_speed = 0;
-            attack_type = irandom(2);
-            if (attack_type == 0){
-                image_blend = make_colour_hsv(255, 255, 255);
-            }
-            else if (attack_type == 1){
-                image_blend =  make_colour_hsv(255, 255, 0);;
-            }
-            else {
-                image_blend = make_color_hsv(0, 255, 0);
-            }
+            attack_type = irandom(1);
             image_index = 0;
             pause_frames = 10;
             num_state_iterations++;
@@ -195,12 +187,12 @@ if (pause_frames &lt;= 0){
             if (attack_type == 0){
                 ranged_attack_type = obj_fire_wall;
             }
-            else if (attack_type == 1){
-                ranged_attack_type = obj_electric_wall;
-            }
-            else {
+            else{
                 ranged_attack_type = obj_damage_wall;
             }
+            /**else {
+                ranged_attack_type = obj_damage_wall;
+            }*/
             ranged_attack = instance_create(x, 232, ranged_attack_type);
             image_index = 1;
             show_debug_message("wall attack");
@@ -226,13 +218,8 @@ if (pause_frames &lt;= 0){
             if (dir == 0){
                 move_speed = min_speed;
                 dir = sign(player.x - x);
-                image_speed = 0.2;
                 image_xscale = dir * -1;
                 x -= image_xscale * 6;
-            }
-            else if (charge_frame_count == 20){
-                move_speed = max_speed;
-                pause_frames =  charge_begin_pause;
             }
             hsp = move_speed * dir;
             if (place_meeting(x + hsp, y - 3, floorbox)){
@@ -264,6 +251,10 @@ if (pause_frames &lt;= 0){
             }
             charge_frame_count++;
             x += hsp;
+            if (charge_frame_count == 20){
+                move_speed = max_speed;
+                pause_frames =  charge_begin_pause;
+            }
             /**if (charge_frame_count == 0 &amp;&amp; dir != sign(player.x - x)){
                 sprite_index = spr_boss_minotaur_charging;
                 move_speed = min_speed;
