@@ -166,6 +166,9 @@
           <object>objects\obj_platform_boss</object>
           <object>objects\obj_platform_boss_controller</object>
         </objects>
+        <objects name="vertical">
+          <object>objects\obj_vertical_platform</object>
+        </objects>
         <object>objects\obj_boss_burner</object>
         <objects name="angry">
           <object>objects\obj_electric_wall</object>
@@ -244,6 +247,7 @@
   </objects>
   <rooms name="rooms">
     <room>rooms\room_initialize</room>
+    <room>rooms\room_boss_vertical</room>
     <room>rooms\room_boss_angry</room>
     <rooms name="level 1">
       <room>rooms\room_1_1_new</room>

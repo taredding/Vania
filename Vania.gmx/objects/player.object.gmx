@@ -55,6 +55,7 @@ instance_create(x, y, obj_GUI);
 
 //used for moving platforms;
 hsp_carry = 0;
+vsp_carry = 0;
 
 //this variable is used to check if the player is on the ground while on stairs
 on_ground = true;
@@ -528,7 +529,10 @@ if (vsp &lt; 10){
     }
     hsp = 0;
 }*/
-x += hsp_final; 
+x += hsp_final;
+
+vsp = vsp + vsp_carry;
+vsp_carry = 0;
 //vertical collision
 if (place_meeting(x, y + vsp, floorbox)){
     while(!place_meeting(x, y + vsp, floorbox)){
@@ -536,7 +540,6 @@ if (place_meeting(x, y + vsp, floorbox)){
     }
     vsp = 0;
 }
-
 y += vsp;
 </string>
           </argument>
