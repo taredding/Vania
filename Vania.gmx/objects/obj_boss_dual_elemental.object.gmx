@@ -67,7 +67,7 @@ max_charge_attacks = 3;
 num_state_iterations = 0;
 
 num_ranged_attacks = 0;
-max_ranged_attacks = 5;
+max_ranged_attacks = 3;
 
 frames_before_switch = 60;
 state = 0;
@@ -334,7 +334,11 @@ if (pause_frames &lt;= 0){
                 vsp = -jump_speed;
                 image_index = 1;
                 pause_frames = frames_between_stomps;
-                num_stomps++; 
+                num_stomps++;
+                next_fall = instance_create(x + 16 * image_xscale * -1, 0, obj_debris_drop);
+                with(next_fall){
+                        move_speed = 4;
+                }
                 for (i = 0; i &lt; 4; i++){
                     next_fall = instance_create(16 * (i + 1 + irandom(9)), 0, obj_debris_drop);
                     with(next_fall){
